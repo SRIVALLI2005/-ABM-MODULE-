@@ -1,18 +1,40 @@
 org 100h
 
-jmp new
+n1 db 24h
+n2 db 29h
 
-msg: db "HelloWorld" ,0Dh,0Ah,24h
+start:
 
-new: mov dx ,msg
+mov al, n1
+add al, n2
 
-mov ah , 09h
 
+mov bl, al
+
+mov ah, al
+and ah, 0F0h
+shr ah,4
+add ah, 30h
+cmp ah, 39h
+jle print_first_digit
+add ah, 7  
+
+print_first_digit:
+mov dl,ah
+mov ah,02h
 int 21h
 
-mov ah , 0
+mov ah, bl
+and ah, 0Fh
+add ah, 30h
+cmp ah, 39h 
+jle print_sec_digit
+add ah,7
 
-int 16h
+print_sec_digit:
+mov dl,ah
+mov ah, 02h
+int 21h
 
-ret 
-
+mov ah,4Ch
+int 21h
